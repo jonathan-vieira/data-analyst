@@ -1,3 +1,29 @@
+# Preparação dos Dados
+
+Primeiro antes de começar as analises, foi criado uma tabela em um banco local e utilizado o **Pentaho** para importar o csv no banco, nessa importação surgiram alertas de id's duplicados. Para remove-los, primeiro foram adicionados todos no banco tirando a **chave primaria** da coluna **id** e logo em seguida encontrados todos os duplicados e removidos.
+
+Para encontrar os duplicados foi utilizada a seguinte query:
+
+```sql
+select
+   id, count(*) as CountOf
+from buscas
+group by id
+having count(*)>1;
+ ```  
+ 
+ Foram encontrados **621** id's duplicados e foram removidos usando a seguinte query, substituindo 
+ 'ids' pelos id duplicados
+
+
+```sql
+Delete from buscas
+Where id in ('ids')
+```
+
+
+# Analises feitas
+
 Impulsionar nossas buscas
 
 1) Qual é a análise:
@@ -24,14 +50,14 @@ order by 1 desc;
 
 | Qtde  |  Aeroporto Volta |
 | --- | --- |
-| 153458	| Buenos Aires - Todos |
-| 92133	| Santiago, Chile |
-| 88202	| Miami Intl |
-| 66430	| Orlando |
+| 153453	| Buenos Aires - Todos |
+| 92127	| Santiago, Chile |
+| 88196	| Miami Intl |
+| 66425	| Orlando |
 | 58261	| Lisboa, Portugal |
 | 44381	| Nova Iorque - Todos |
-| 41794	| Rosário |
-| 30996	| Montevideo |
+| 41792	| Rosário |
+| 30995	| Montevideo |
 | 25510	| Paris - Todos |
 | 22403 |	Lima, Peru |
 
@@ -67,18 +93,18 @@ select
 from buscas
 join dias on dias.id = extract(dow from  data_busca)
 group by 2
-order by 1;
+order by 1 desc;
 ```
 
 | Qtde | Dia |
 | --- | --- |
-| 1961435	| Seg |
-| 1959036	| Qua |
-| 1901204	| Ter |
-| 1900939	| Sex |
-| 1876104	| Qui |
-| 1423362	| Dom |
-| 1411690	| Sab |
+| 1961350	| Seg |
+| 1958960	| Qua |
+| 1901121	| Ter |
+| 1900767	| Sex |
+| 1875990	| Qui |
+| 1423311	| Dom |
+| 1411650	| Sab |
 
 
 Construir a marca
@@ -104,8 +130,8 @@ order by 1 desc;
 
 | Qtde | Valor |
 | --- | --- |
-| 12433386 | true|
-| 384 |	false |
+| 12432770 | true|
+| 379 |	false |
 
 
 
@@ -139,13 +165,13 @@ order by  diff_segundos_entre_fim_da_busca_e_recebimento desc;
 
 | id | data_fim_buscador | data_recebimento_busca | diff |
 | --- | --- | --- | --- |
-20915592 | 2016-12-03 12:16:25.000000 |	2017-01-06 17:57:17.000000 |	2958052 |
-20915573 | 2016-12-03 12:16:27.000000 |	2017-01-06 17:57:10.000000 |	2958043 |
-23968287 | 2016-12-28 09:28:39.000000 |	2017-01-23 11:18:26.000000 |	2252987 |
-23968296 | 2016-12-28 10:03:39.000000 |	2017-01-23 11:21:22.000000 |	2251063 |
-23968925 | 2016-12-28 10:04:00.000000 |	2017-01-23 11:21:21.000000 |	2251041 |
-23968944 | 2016-12-28 10:39:03.000000 |	2017-01-23 11:30:20.000000 |	2249477 |
-23970894 | 2016-12-28 10:39:12.000000	| 2017-01-23 11:30:22.000000 |	2249470 | 
-23970912 | 2017-01-05 04:20:41.000000	| 2017-01-24 13:52:57.000000 |	1675936 |
-24198830 | 2017-01-05 04:20:41.000000 | 2017-01-24 13:52:57.000000 |	1675936 |
-20135808 | 2017-01-05 04:20:41.000000	| 2017-01-24 13:52:57.000000 |	1675936 |
+| 20915592 | 2016-12-03 12:16:25.000000 |	2017-01-06 17:57:17.000000 |	2958052 |
+| 20915573 | 2016-12-03 12:16:27.000000 |	2017-01-06 17:57:10.000000 |	2958043 |
+| 23968287 | 2016-12-28 09:28:39.000000 |	2017-01-23 11:18:26.000000 |	2252987 |
+| 23968296 | 2016-12-28 10:03:39.000000 |	2017-01-23 11:21:22.000000 |	2251063 |
+| 23968925 | 2016-12-28 10:04:00.000000 |	2017-01-23 11:21:21.000000 |	2251041 |
+| 23968944 | 2016-12-28 10:39:03.000000 |	2017-01-23 11:30:20.000000 |	2249477 |
+| 23970894 | 2016-12-28 10:39:12.000000 | 2017-01-23 11:30:22.000000 |	2249470 | 
+| 23970912 | 2017-01-05 04:20:41.000000 | 2017-01-24 13:52:57.000000 |	1675936 |
+| 24198830 | 2017-01-05 04:20:41.000000 | 2017-01-24 13:52:57.000000 |	1675936 |
+| 20135808 | 2017-01-05 04:20:41.000000 | 2017-01-24 13:52:57.000000 |	1675936 |
